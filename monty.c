@@ -1,5 +1,6 @@
 #include "monty.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * main - entry point
@@ -11,9 +12,20 @@
  */
 int main(int ac, char *av[])
 {
-	(void)ac;
-	(void)av;
+	FILE *stream;
 
-	printf("Hello World\n");
+	if (ac < 2)
+	{
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
+	}
+	stream = fopen(av[1], "r");
+	if (stream == NULL)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", av[1]);
+		exit(EXIT_FAILURE);
+	}
+	parse_file(stream);
+	fclose(stream);
 	return (0);
 }
