@@ -43,7 +43,12 @@ void stack_push(stack_t **stack, unsigned int line_number);
 void stack_pall(stack_t **stack, unsigned int line_number);
 void opcode_pint(stack_t **stack, unsigned int line_number);
 
-stack_t *stack_pop(stack_t **stack);
+void opcode_add(stack_t **stack, unsigned int line_number);
+
+void push(stack_t **stack, stack_t *node);
+stack_t *pop(stack_t **stack);
 void free_stack(stack_t **stack);
+
+void opcode_swap(stack_t **stack, unsigned int line_number);
 
 #endif /* MONTY_H */

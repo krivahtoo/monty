@@ -7,6 +7,19 @@
 char *line = NULL;
 
 /**
+ * opcode_nop - does nothing
+ *
+ * @stack: pointer to the stack
+ * @line_number: number of the line
+ */
+void opcode_nop(stack_t **stack, unsigned int line_number)
+{
+	(void)stack;
+	(void)line_number;
+	/* Do Nothing */
+}
+
+/**
  * parse_line - parses a line of monty code
  *
  * @stack: pointer to the stack
@@ -24,6 +37,9 @@ int parse_line(stack_t **stack, unsigned int *line_no)
 		{ "pall", stack_pall },
 		{ "pint", opcode_pint },
 		{ "pop", opcode_pop },
+		{ "swap", opcode_swap },
+		{ "add", opcode_add },
+		{ "nop", opcode_nop },
 		{ NULL, NULL },
 	};
 

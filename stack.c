@@ -12,7 +12,7 @@
 void stack_push(stack_t **stack, unsigned int line_number)
 {
 	char *tmp = NULL, *token = NULL;
-	stack_t *new = NULL, *node = *stack;
+	stack_t *new = NULL;
 	int i = 0;
 
 	tmp = strdup(line);
@@ -32,12 +32,26 @@ void stack_push(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 	new->n = i;
-	new->next = node;
+	new->next = NULL;
 	new->prev = NULL;
-	*stack = new;
-	if (node != NULL)
-		node->prev = new;
+	push(stack, new);
 	free(tmp);
+}
+
+/**
+ * push - push a value to stack
+ *
+ * @stack: pointer to the stack
+ * @node: pointer to node
+ */
+void push(stack_t **stack, stack_t *node)
+{
+	stack_t *tmp = *stack;
+
+	node->next = tmp;
+	*stack = node;
+	if (tmp)
+		tmp->prev = node;
 }
 
 /**
@@ -48,7 +62,7 @@ void stack_push(stack_t **stack, unsigned int line_number)
  */
 void opcode_pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *node = stack_pop(stack);
+	stack_t *node = pop(stack);
 
 	if (node == NULL)
 	{
@@ -84,7 +98,7 @@ void stack_pall(stack_t **stack, unsigned int line_number)
  *
  * Return: the popped value
  */
-stack_t *stack_pop(stack_t **stack)
+stack_t *pop(stack_t **stack)
 {
 	stack_t *node = *stack;
 
