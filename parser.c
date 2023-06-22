@@ -22,6 +22,7 @@ int parse_line(stack_t **stack, unsigned int *line_no)
 	instruction_t inst[] = {
 		{ "push", stack_push },
 		{ "pall", stack_pall },
+		{ "pop", opcode_pop },
 		{ NULL, NULL },
 	};
 
