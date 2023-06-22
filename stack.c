@@ -19,11 +19,14 @@ void stack_push(stack_t **stack, unsigned int line_number)
 	token = strtok(tmp, " ");
 	if (token == NULL)
 	{
+bail:
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
 	i = atoi(strtok(NULL, " "));
+	if (i == 0 && *token != '0')
+		goto bail;
 	new = malloc(sizeof(stack_t));
 	if (new == NULL)
 	{
@@ -66,7 +69,7 @@ void opcode_pop(stack_t **stack, unsigned int line_number)
 
 	if (node == NULL)
 	{
-		fprintf(stderr, "L%d: can't pop an empty stack", line_number);
+		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	free(node);
@@ -92,7 +95,7 @@ void stack_pall(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * stack_pop - pop a value from stack
+ * pop - pop a value from stack
  *
  * @stack: pointer to the stack
  *
