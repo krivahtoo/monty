@@ -4,18 +4,18 @@
 #include <string.h>
 
 /**
- * stack_push - push a value to stack
+ * opcode_push - push a value to stack
  *
  * @stack: pointer to the stack
  * @line_number: number of the line
  */
-void stack_push(stack_t **stack, unsigned int line_number)
+void opcode_push(stack_t **stack, unsigned int line_number)
 {
 	char *tmp = NULL, *token = NULL;
 	stack_t *new = NULL;
 	int i = 0;
 
-	tmp = strdup(line);
+	tmp = strdup(ctx.line);
 	token = strtok(tmp, " ");
 	if (token == NULL)
 	{
@@ -24,8 +24,9 @@ bail:
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
-	i = atoi(strtok(NULL, " "));
-	if (i == 0 && *token != '0')
+	token = strtok(NULL, " ");
+	i = atoi(token);
+	if (token == NULL || (i == 0 && *token != '0'))
 		goto bail;
 	new = malloc(sizeof(stack_t));
 	if (new == NULL)
@@ -37,7 +38,7 @@ bail:
 	new->n = i;
 	new->next = NULL;
 	new->prev = NULL;
-	push(stack, new);
+	push(stack, new, ctx.fmt);
 	free(tmp);
 }
 
@@ -46,15 +47,35 @@ bail:
  *
  * @stack: pointer to the stack
  * @node: pointer to node
+ * @back: if to pust to back
  */
-void push(stack_t **stack, stack_t *node)
+void push(stack_t **stack, stack_t *node, int back)
 {
-	stack_t *tmp = *stack;
+	stack_t *tmp = *stack, *old = NULL;
 
-	node->next = tmp;
-	*stack = node;
-	if (tmp)
-		tmp->prev = node;
+	switch (back)
+	{
+		case 0:
+			node->next = tmp;
+			*stack = node;
+			if (tmp)
+				tmp->prev = node;
+			break;
+		case 1:
+			while (tmp != NULL)
+			{
+				old = tmp;
+				tmp = tmp->next;
+			}
+			node->prev = old;
+			if (old == NULL)
+				*stack = node;
+			else
+				old->next = node;
+			break;
+		default:
+			break;
+	}
 }
 
 /**
@@ -65,7 +86,7 @@ void push(stack_t **stack, stack_t *node)
  */
 void opcode_pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *node = pop(stack);
+	stack_t *node = pop(stack, 0);
 
 	if (node == NULL)
 	{
@@ -76,40 +97,43 @@ void opcode_pop(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * stack_pall - prints all the values on the stack,
- * starting from the top of the stack.
- *
- * @stack: pointer to the stack
- * @line_number: number of the line
- */
-void stack_pall(stack_t **stack, unsigned int line_number)
-{
-	stack_t *node = *stack;
-
-	(void)line_number;
-	while (node != NULL)
-	{
-		printf("%d\n", node->n);
-		node = node->next;
-	}
-}
-
-/**
  * pop - pop a value from stack
  *
  * @stack: pointer to the stack
+ * @back: if to pop from back
  *
  * Return: the popped value
  */
-stack_t *pop(stack_t **stack)
+stack_t *pop(stack_t **stack, int back)
 {
 	stack_t *node = *stack;
 
-	if (node == NULL)
-		return (NULL);
-	*stack = node->next;
-	if (node->next)
-		node->next->prev = NULL;
-	node->next = NULL;
+	switch (back)
+	{
+		case 0:
+			if (node == NULL)
+				return (NULL);
+			*stack = node->next;
+			if (node->next)
+				node->next->prev = NULL;
+			node->next = NULL;
+			break;
+		case 1:
+			while (node && node->next)
+			{
+				node = node->next;
+			}
+			if (node != NULL)
+			{
+				if (node->prev)
+					node->prev->next = NULL;
+				else
+					*stack = NULL;
+				node->prev = NULL;
+			}
+			break;
+		default:
+			break;
+	}
 	return (node);
 }

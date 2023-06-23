@@ -3,6 +3,25 @@
 
 #include <stdio.h>
 
+#define INSTRUCTIONS() {			\
+		{ "push", opcode_push },	\
+		{ "pall", opcode_pall },	\
+		{ "pint", opcode_pint },	\
+		{ "pop", opcode_pop },		\
+		{ "swap", opcode_swap },	\
+		{ "add", opcode_add },		\
+		{ "nop", opcode_nop },		\
+		{ "sub", opcode_sub },		\
+		{ "div", opcode_div },		\
+		{ "mul", opcode_mul },		\
+		{ "mod", opcode_mod },		\
+		{ "pchar", opcode_pchar },	\
+		{ "pstr", opcode_pstr },	\
+		{ "stack", opcode_stack },	\
+		{ "queue", opcode_queue },	\
+		{ NULL, NULL },				\
+	}
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -33,22 +52,54 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-extern char *line;
+/**
+ * enum format_e - stack format LIFO/FIFO
+ * @LIFO: Last in first out
+ * @FIFO: First in first out
+ */
+typedef enum format_e
+{
+	LIFO = 0,
+	FIFO
+} format_t;
+
+/**
+ * struct context_s - current program context
+ * @line: line buffer
+ * @fmt: stack format
+ */
+typedef struct context_s
+{
+	char *line;
+	format_t fmt;
+} context_t;
+
+extern context_t ctx;
 
 void parse_file(FILE *stream);
 int parse_line(stack_t **stack, unsigned int *line_no);
 
 void opcode_pop(stack_t **stack, unsigned int line_number);
-void stack_push(stack_t **stack, unsigned int line_number);
-void stack_pall(stack_t **stack, unsigned int line_number);
+void opcode_push(stack_t **stack, unsigned int line_number);
+
+void opcode_pall(stack_t **stack, unsigned int line_number);
 void opcode_pint(stack_t **stack, unsigned int line_number);
+void opcode_pchar(stack_t **stack, unsigned int line_number);
+void opcode_pstr(stack_t **stack, unsigned int line_number);
 
 void opcode_add(stack_t **stack, unsigned int line_number);
+void opcode_sub(stack_t **stack, unsigned int line_number);
+void opcode_div(stack_t **stack, unsigned int line_number);
+void opcode_mul(stack_t **stack, unsigned int line_number);
+void opcode_mod(stack_t **stack, unsigned int line_number);
 
-void push(stack_t **stack, stack_t *node);
-stack_t *pop(stack_t **stack);
+void push(stack_t **stack, stack_t *node, int back);
+stack_t *pop(stack_t **stack, int back);
 void free_stack(stack_t **stack);
 
 void opcode_swap(stack_t **stack, unsigned int line_number);
+void opcode_nop(stack_t **stack, unsigned int line_number);
+void opcode_stack(stack_t **stack, unsigned int line_number);
+void opcode_queue(stack_t **stack, unsigned int line_number);
 
 #endif /* MONTY_H */

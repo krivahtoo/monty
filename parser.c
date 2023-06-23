@@ -4,20 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *line = NULL;
-
-/**
- * opcode_nop - does nothing
- *
- * @stack: pointer to the stack
- * @line_number: number of the line
- */
-void opcode_nop(stack_t **stack, unsigned int line_number)
-{
-	(void)stack;
-	(void)line_number;
-	/* Do Nothing */
-}
+context_t ctx = { NULL, LIFO };
 
 /**
  * parse_line - parses a line of monty code
@@ -32,22 +19,13 @@ int parse_line(stack_t **stack, unsigned int *line_no)
 	int i = 0;
 	char *tmp = NULL;
 	char *token = NULL;
-	instruction_t inst[] = {
-		{ "push", stack_push },
-		{ "pall", stack_pall },
-		{ "pint", opcode_pint },
-		{ "pop", opcode_pop },
-		{ "swap", opcode_swap },
-		{ "add", opcode_add },
-		{ "nop", opcode_nop },
-		{ NULL, NULL },
-	};
+	instruction_t inst[] = INSTRUCTIONS();
 
 	(*line_no)++;
-	tmp = strtok(line, "\n");
+	tmp = strtok(ctx.line, "\n");
 	tmp = strdup(tmp);
 	token = strtok(tmp, " ");
-	if (token == NULL)
+	if (token == NULL || *token == '#')
 		goto end;
 	for (i = 0; inst[i].opcode; i++)
 	{
@@ -81,22 +59,22 @@ void parse_file(FILE *stream)
 
 	while (1)
 	{
-		free(line);
-		line = NULL;
-		if (getline(&line, &size, stream) == EOF)
+		free(ctx.line);
+		ctx.line = NULL;
+		if (getline(&ctx.line, &size, stream) == EOF)
 			break;
-		if (strcmp(line, "\n") == 0)
+		if (strcmp(ctx.line, "\n") == 0)
 			continue;
 		if (parse_line(&stack, &line_no) != 0)
 		{
-			token = strtok(line, " ");
+			token = strtok(ctx.line, " ");
 			fprintf(stderr, "L%d: unknown instruction %s\n", line_no, token);
 			fclose(stream);
-			free(line);
+			free(ctx.line);
 			free_stack(&stack);
 			exit(EXIT_FAILURE);
 		}
 	}
-	free(line);
+	free(ctx.line);
 	free_stack(&stack);
 }
