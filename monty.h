@@ -72,9 +72,12 @@ typedef struct context_s
 {
 	char *line;
 	format_t fmt;
+	FILE *stream;
 } context_t;
 
 extern context_t ctx;
+
+void free_ctx(void);
 
 void parse_file(FILE *stream);
 int parse_line(stack_t **stack, unsigned int *line_no);

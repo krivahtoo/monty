@@ -1,4 +1,5 @@
 #include "monty.h"
+#include "operators.h"
 #include <stdlib.h>
 
 /**
@@ -46,10 +47,7 @@ void opcode_swap(stack_t **stack, unsigned int line_number)
 	if (n1 == NULL || n2 == NULL)
 	{
 		fprintf(stderr, "L%d: can't swap, stack too short\n", line_number);
-		free(n1);
-		free(n2);
-		free_stack(stack);
-		exit(EXIT_FAILURE);
+		BAIL();
 	}
 	push(stack, n1, 0);
 	push(stack, n2, 0);

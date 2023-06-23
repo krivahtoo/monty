@@ -21,6 +21,7 @@ void opcode_push(stack_t **stack, unsigned int line_number)
 	{
 bail:
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);
+		free_ctx();
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
@@ -32,6 +33,7 @@ bail:
 	if (new == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
+		free_ctx();
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
@@ -91,6 +93,7 @@ void opcode_pop(stack_t **stack, unsigned int line_number)
 	if (node == NULL)
 	{
 		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
+		free_ctx();
 		exit(EXIT_FAILURE);
 	}
 	free(node);

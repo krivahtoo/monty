@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-context_t ctx = { NULL, LIFO };
-
 /**
  * parse_line - parses a line of monty code
  *
@@ -17,31 +15,26 @@ context_t ctx = { NULL, LIFO };
 int parse_line(stack_t **stack, unsigned int *line_no)
 {
 	int i = 0;
-	char *tmp = NULL;
 	char *token = NULL;
 	instruction_t inst[] = INSTRUCTIONS();
 
 	(*line_no)++;
-	tmp = strtok(ctx.line, "\n");
-	tmp = strdup(tmp);
-	token = strtok(tmp, " ");
+	token = strtok(ctx.line, "\n");
+	while (*token == ' ')
+		token++;
 	if (token == NULL || *token == '#')
 		goto end;
 	for (i = 0; inst[i].opcode; i++)
 	{
-		if (strcmp(token, inst[i].opcode) == 0)
+		if (strncmp(token, inst[i].opcode, strlen(inst[i].opcode)) == 0)
 		{
 			inst[i].f(stack, *line_no);
 			goto end;
 		}
 	}
 	if (strcmp(token, "") != 0)
-	{
-		free(tmp);
 		return (1);
-	}
 end:
-	free(tmp);
 	return (0);
 }
 
@@ -69,12 +62,10 @@ void parse_file(FILE *stream)
 		{
 			token = strtok(ctx.line, " ");
 			fprintf(stderr, "L%d: unknown instruction %s\n", line_no, token);
-			fclose(stream);
-			free(ctx.line);
+			free_ctx();
 			free_stack(&stack);
 			exit(EXIT_FAILURE);
 		}
 	}
-	free(ctx.line);
 	free_stack(&stack);
 }

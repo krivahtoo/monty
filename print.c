@@ -35,7 +35,7 @@ void opcode_pint(stack_t **stack, unsigned int line_number)
 	if (node == NULL)
 	{
 		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
-		free(ctx.line);
+		free_ctx();
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
@@ -57,15 +57,15 @@ void opcode_pchar(stack_t **stack, unsigned int line_number)
 	if (node == NULL)
 	{
 		fprintf(stderr, "L%d: can't pchar, stack empty\n", line_number);
-		free(ctx.line);
+		free_ctx();
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
 	n = node->n;
-	if (n > 127 && n < 0)
+	if (n > 127 || n < 0)
 	{
 		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_number);
-		free(ctx.line);
+		free_ctx();
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
