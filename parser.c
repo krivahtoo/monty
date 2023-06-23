@@ -18,7 +18,6 @@ int parse_line(stack_t **stack, unsigned int *line_no)
 	char *token = NULL;
 	instruction_t inst[] = INSTRUCTIONS();
 
-	(*line_no)++;
 	token = strtok(ctx.line, "\n");
 	while (*token == ' ')
 		token++;
@@ -40,10 +39,8 @@ end:
 
 /**
  * parse_file - reads a file and executes the instructions in it
- *
- * @stream: file to read from
  */
-void parse_file(FILE *stream)
+void parse_file(void)
 {
 	size_t size = 0;
 	unsigned int line_no = 0;
@@ -54,8 +51,9 @@ void parse_file(FILE *stream)
 	{
 		free(ctx.line);
 		ctx.line = NULL;
-		if (getline(&ctx.line, &size, stream) == EOF)
+		if (getline(&ctx.line, &size, ctx.stream) == EOF)
 			break;
+		line_no++;
 		if (strcmp(ctx.line, "\n") == 0)
 			continue;
 		if (parse_line(&stack, &line_no) != 0)

@@ -11,12 +11,11 @@
  */
 void opcode_push(stack_t **stack, unsigned int line_number)
 {
-	char *tmp = NULL, *token = NULL;
+	char *token = NULL;
 	stack_t *new = NULL;
 	int i = 0;
 
-	tmp = strdup(ctx.line);
-	token = strtok(tmp, " ");
+	token = strtok(ctx.line, " ");
 	if (token == NULL)
 	{
 bail:
@@ -26,8 +25,10 @@ bail:
 		exit(EXIT_FAILURE);
 	}
 	token = strtok(NULL, " ");
+	if (token == NULL)
+		goto bail;
 	i = atoi(token);
-	if (token == NULL || (i == 0 && *token != '0'))
+	if (i == 0 && *token != '0')
 		goto bail;
 	new = malloc(sizeof(stack_t));
 	if (new == NULL)
@@ -41,7 +42,6 @@ bail:
 	new->next = NULL;
 	new->prev = NULL;
 	push(stack, new, ctx.fmt);
-	free(tmp);
 }
 
 /**

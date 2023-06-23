@@ -67,6 +67,7 @@ typedef enum format_e
  * struct context_s - current program context
  * @line: line buffer
  * @fmt: stack format
+ * @stream: file strem
  */
 typedef struct context_s
 {
@@ -79,7 +80,7 @@ extern context_t ctx;
 
 void free_ctx(void);
 
-void parse_file(FILE *stream);
+void parse_file(void);
 int parse_line(stack_t **stack, unsigned int *line_no);
 
 void opcode_pop(stack_t **stack, unsigned int line_number);
