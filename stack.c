@@ -15,7 +15,7 @@ void opcode_push(stack_t **stack, unsigned int line_number)
 	stack_t *new = NULL;
 	int i = 0;
 
-	token = strtok(ctx.line, " ");
+	token = strtok(NULL, " ");
 	if (token == NULL)
 	{
 bail:
@@ -24,9 +24,6 @@ bail:
 		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
-	token = strtok(NULL, " ");
-	if (token == NULL)
-		goto bail;
 	i = atoi(token);
 	if (i == 0 && *token != '0')
 		goto bail;

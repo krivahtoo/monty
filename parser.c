@@ -19,13 +19,12 @@ int parse_line(stack_t **stack, unsigned int *line_no)
 	instruction_t inst[] = INSTRUCTIONS();
 
 	token = strtok(ctx.line, "\n");
-	while (*token == ' ')
-		token++;
+	token = strtok(ctx.line, " ");
 	if (token == NULL || *token == '#')
 		goto end;
 	for (i = 0; inst[i].opcode; i++)
 	{
-		if (strncmp(token, inst[i].opcode, strlen(inst[i].opcode)) == 0)
+		if (strcmp(token, inst[i].opcode) == 0)
 		{
 			inst[i].f(stack, *line_no);
 			goto end;
