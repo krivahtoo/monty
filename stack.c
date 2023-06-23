@@ -12,6 +12,8 @@
  */
 int is_number(char *str)
 {
+	if (*str == '-')
+		str++;
 	while (*str)
 	{
 		if (*str < '0' || *str > '9')

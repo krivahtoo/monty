@@ -19,6 +19,8 @@
 		{ "pstr", opcode_pstr },	\
 		{ "stack", opcode_stack },	\
 		{ "queue", opcode_queue },	\
+		{ "rotl", opcode_rotl },	\
+		{ "rotr", opcode_rotr },	\
 		{ NULL, NULL },				\
 	}
 
@@ -105,5 +107,8 @@ void opcode_swap(stack_t **stack, unsigned int line_number);
 void opcode_nop(stack_t **stack, unsigned int line_number);
 void opcode_stack(stack_t **stack, unsigned int line_number);
 void opcode_queue(stack_t **stack, unsigned int line_number);
+
+void opcode_rotl(stack_t **stack, unsigned int line_number);
+void opcode_rotr(stack_t **stack, unsigned int line_number);
 
 #endif /* MONTY_H */

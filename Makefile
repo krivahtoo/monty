@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Werror -Wextra -pedantic -std=gnu89 -ggdb
 DEPS=monty.h
-OBJ=monty.o parser.o stack.o utils.o print.o operators.o
+OBJ=monty.o parser.o stack.o utils.o print.o operators.o rotate.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
