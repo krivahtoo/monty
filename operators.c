@@ -86,7 +86,7 @@ void opcode_div(stack_t **stack, unsigned int line_number)
 		if (n1 && n1->n == 0)
 			fprintf(stderr, "L%d: division by zero\n", line_number);
 		else
-			fprintf(stderr, "L%d: can't sub, stack too short\n", line_number);
+			fprintf(stderr, "L%d: can't div, stack too short\n", line_number);
 		BAIL();
 	}
 	new = malloc(sizeof(stack_t));
@@ -155,7 +155,7 @@ void opcode_mod(stack_t **stack, unsigned int line_number)
 		if (n1 && n1->n == 0)
 			fprintf(stderr, "L%d: division by zero\n", line_number);
 		else
-			fprintf(stderr, "L%d: can't sub, stack too short\n", line_number);
+			fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
 		BAIL();
 	}
 	new = malloc(sizeof(stack_t));

@@ -4,6 +4,24 @@
 #include <string.h>
 
 /**
+ * is_number - check if a string is a number
+ *
+ * @str: string pointer to check
+ *
+ * Return: 1 if number, 0 otherwise
+ */
+int is_number(char *str)
+{
+	while (*str)
+	{
+		if (*str < '0' || *str > '9')
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+/**
  * opcode_push - push a value to stack
  *
  * @stack: pointer to the stack
@@ -16,7 +34,7 @@ void opcode_push(stack_t **stack, unsigned int line_number)
 	int i = 0;
 
 	token = strtok(NULL, " ");
-	if (token == NULL)
+	if (token == NULL || is_number(token) == 0)
 	{
 bail:
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);

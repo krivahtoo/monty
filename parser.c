@@ -21,18 +21,17 @@ int parse_line(stack_t **stack, unsigned int *line_no)
 	token = strtok(ctx.line, "\n");
 	token = strtok(ctx.line, " ");
 	if (token == NULL || *token == '#')
-		goto end;
+		return (0);
 	for (i = 0; inst[i].opcode; i++)
 	{
 		if (strcmp(token, inst[i].opcode) == 0)
 		{
 			inst[i].f(stack, *line_no);
-			goto end;
+			return (0);
 		}
 	}
 	if (strcmp(token, "") != 0)
 		return (1);
-end:
 	return (0);
 }
 
